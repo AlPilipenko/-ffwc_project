@@ -22,6 +22,14 @@ class PersonalPage(ListView, LoginRequiredMixin):
     context_object_name = 'user_data'
     template_name = 'ffwc_app/personal_page.html'
 
+    def get_context_data(self, **kwargs):
+        """ To see user specific data in the personal page.
+        """
+        context = super().get_context_data(**kwargs)
+        context['user_data'] = context['user_data'].filter(user=self.request.user)
+
+        return context
+
 
 class TestDetail(DetailView):
     pass
@@ -34,21 +42,31 @@ class InputWeight(UpdateView, LoginRequiredMixin):
     model = User_Data
     fields = ('weight_update', )
     # fields = '__all__'
-    success_url = reverse_lazy('user_data')
+    success_url = reverse_lazy('group')
 
 
-class ChangeUserDetails(CreateView, LoginRequiredMixin):
+class ChangeUserDetails(UpdateView, LoginRequiredMixin):
     model = User_Data
     # fields = ('weight_update', )
     fields = '__all__'
-    success_url = reverse_lazy('user_data')
+    success_url = reverse_lazy('account')
+
+
+class CreateUserDetails(CreateView, LoginRequiredMixin):
+    model = User_Data
+    # fields = ('weight_update', )
+    fields = '__all__'
+    success_url = reverse_lazy('account')
 
 
 class Group(ListView):
     model = User_Data
-    context_object_name = 'group'
+    context_object_name = 'user_data'
+
     template_name = 'ffwc_app/group.html'
 
+
+'____________________________________________________'
 
 class CustomLoginView(LoginView):
     template_name = 'ffwc_app/login.html'
@@ -66,6 +84,7 @@ class RegisterPage(FormView):
     success_url = reverse_lazy('group')
 
     def form_valid(self, form):
+        """When reg form is valid return logedin user to the group page"""
         user = form.save()
         if user is not None:
             login(self.request, user)

@@ -1,0 +1,4 @@
+html {
+  background-color: #17605d !important;
+  /* background: "{% url 'static' default.jpg %}"; */
+}

@@ -1,3 +1,6 @@
+{% extends 'ffwc_app/base.html' %}
+{% block content %}
+
 <h3>Register</h3>
 <form class="" action="" method="POST">
   {% csrf_token %}
@@ -13,3 +16,6 @@
 </form>
 
 <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+
+
+{% endblock %}

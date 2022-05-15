@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
+{% extends 'ffwc_app/base.html' %}
+{% block content %}
 
     <a href="{% url 'update-weight' %}">Record weight</a>
+    <h1>efef{{ user_data }}</h1>
     <table>
       <tr>
-        <th>Item</th>
+        <th>Personal details</th>
       </tr>
       {% for data in user_data %}
       <tr>
@@ -25,11 +21,14 @@
         <td>Height {{ data.height }}</td>
       </tr>
       <tr>
-        <td><a href="{% url 'test' data.id %}">View</a></td>
+        <td><a href="{% url 'update-details' data.id %}">Edit details</a></td>
       </tr>
       {% empty %}
           <h2>Empty!</h2>
+          <a href="{% url 'new-details' %}">Fill your personal details</a>
       {% endfor %}
     </table>
-  </body>
-</html>
+  <a href="{% url 'group' %}">Back to group page</a>
+
+
+{% endblock %}
