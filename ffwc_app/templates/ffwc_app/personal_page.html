@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <a href="{% url 'update-weight' %}">Record weight</a>
+    <table>
+      <tr>
+        <th>Item</th>
+      </tr>
+      {% for data in user_data %}
+      <tr>
+        <td>Name: {{ data.name }}</td>
+      </tr>
+      <tr>
+        <td>Weight: {{ data.weight }} kg</td>
+      </tr>
+      <tr>
+        <td>Desired weight: {{ data.goal_weight }} kg</td>
+      </tr>
+      <tr>
+        <td>Height {{ data.height }}</td>
+      </tr>
+      <tr>
+        <td><a href="{% url 'test' data.id %}">View</a></td>
+      </tr>
+      {% empty %}
+          <h2>Empty!</h2>
+      {% endfor %}
+    </table>
+  </body>
+</html>
