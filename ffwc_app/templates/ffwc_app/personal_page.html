@@ -28,6 +28,27 @@
           <a href="{% url 'new-details' %}">Fill your personal details</a>
       {% endfor %}
     </table>
+
+    <h3>Weight record</h3>
+    <table>
+      <tr>
+        <th>Date</th>
+        <th>Weight</th>
+      </tr>
+      {% for record in weight_update %}
+      <tr>
+        <td>{{ record.created }}</td>
+
+
+        <td>{{ record.weight_update }} kg</td>
+        <td><a href="{% url 'edit-update-weight' record.id %}">Edit</a></td>
+
+      </tr>
+
+      {% empty %}
+          <h2>Empty!</h2>
+      {% endfor %}
+    </table>
   <a href="{% url 'group' %}">Back to group page</a>
 
 

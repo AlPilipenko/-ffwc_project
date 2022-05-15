@@ -4,7 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.urls import reverse_lazy
-from .models import User_Data
+from .models import User_Data, Weight_Update
 
 
 from django.contrib.auth.views import LoginView
@@ -27,7 +27,8 @@ class PersonalPage(ListView, LoginRequiredMixin):
         """
         context = super().get_context_data(**kwargs)
         context['user_data'] = context['user_data'].filter(user=self.request.user)
-
+        context['weight_update'] = Weight_Update.objects.all().filter(
+                                                    user=self.request.user.id)
         return context
 
 
@@ -38,26 +39,56 @@ class TestDetail(DetailView):
     template_name = 'ffwc_app/test_detail.html'
 
 
-class InputWeight(UpdateView, LoginRequiredMixin):
-    model = User_Data
-    fields = ('weight_update', )
-    # fields = '__all__'
-    success_url = reverse_lazy('group')
+class InputWeight(CreateView, LoginRequiredMixin):
+    model = Weight_Update
+    # fields = ('weight_update', )
+    fields = ['weight_update']
+    # context_object_name = 'weight'
+    context_object_name = 'weight_record'
+    success_url = reverse_lazy('account')
+
+    def form_valid(self, form):
+        """Because one model is related to other, I encountered
+        'must be an instance of other model' error.
+        """
+        form.instance.user_id = self.request.user.id
+        return super(InputWeight, self).form_valid(form)
+
+
+class EditWeightRecord(UpdateView, LoginRequiredMixin):
+    model = Weight_Update
+    # fields = ('weight_update', )
+    fields = ['weight_update']
+    # context_object_name = 'weight'
+    # context_object_name = 'weight_record'
+    template_name = 'ffwc_app/edit_weight_update_form.html'
+    success_url = reverse_lazy('account')
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user.id
+        return super(EditWeightRecord, self).form_valid(form)
 
 
 class ChangeUserDetails(UpdateView, LoginRequiredMixin):
     model = User_Data
     # fields = ('weight_update', )
-    fields = '__all__'
+    fields = ['name', 'weight', 'goal_weight', 'height']
     success_url = reverse_lazy('account')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(ChangeUserDetails, self).form_valid(form)
 
 
 class CreateUserDetails(CreateView, LoginRequiredMixin):
     model = User_Data
     # fields = ('weight_update', )
-    fields = '__all__'
+    fields = ['name', 'weight', 'goal_weight', 'height']
     success_url = reverse_lazy('account')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(CreateUserDetails, self).form_valid(form)
 
 class Group(ListView):
     model = User_Data

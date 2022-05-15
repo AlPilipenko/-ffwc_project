@@ -14,12 +14,22 @@ class User_Data(models.Model):
     # description = models.TextField(null=True, blank=True)
     # complete = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
-    weight_update = models.FloatField(default=0)
-
-
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['created']
+
+
+class Weight_Update(models.Model):
+    user = models.ForeignKey(User_Data, on_delete=models.CASCADE,
+                                                    null=True, blank=True)
+    weight_update = models.FloatField(default=0)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.name
 
     class Meta:
         ordering = ['created']
