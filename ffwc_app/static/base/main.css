@@ -2,3 +2,20 @@ html {
   background-color: #17605d !important;
   /* background: "{% url 'static' default.jpg %}"; */
 }
+
+.background_image {
+  background-image: url("background.jpeg");
+  /* background-color: #cccccc; */
+  height: 1100px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  padding-top: 50px;
+}
+
+
+
+table, th, td {
+  border: 1px solid;
+}

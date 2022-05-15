@@ -12,23 +12,56 @@
 
     <table>
       <tr>
-        <th>Name</th>
-        <th>Weight</th>
-        <th>Desired weight</th>
-      </tr>
-        <!-- <th>Name</th> -->
-
+      <th>Participants</th>
       {% for data in user_data %}
-      <tr>
         <td>{{ data.name }}</td>
-        <td>{{ data.weight }}</td>
-        <td>{{ data.goal_weight }}</td>
-        <!-- <td>Height {{ data.height }}</td> -->
-      </tr>
+        <!-- <th>{{ name }}</th> -->
+        <!-- <th>Weight</th>
+        <th>Desired weight</th> -->
+        <!-- <th>Name</th> -->
       {% endfor %}
+      </tr>
 
+      <tr>
+      <th>Initial weight</th>
+      {% for data in user_data %}
+      <td>{{ data.weight }}</td>
+        <!-- <td>{{ name }}</td> -->
+        <!-- <th>{{ data.name }}</th> -->
+        <!-- <th></th> -->
+        <!-- <th>{{ data.goal_weight }}</th> -->
+        <!-- <td>Height {{ data.height }}</td> -->
+      {% endfor %}
+      </tr>
+
+      <tr>
+      <th>Goal</th>
+      {% for data in user_data %}
+      <td>{{ data.goal_weight }}</td>
+      {% endfor %}
+      </tr>
     </table>
 
+    <br>
+
+    <!-- {{ weight_progress }} -->
+    {% for user in weight_progress %}
+    <table>
+      {% for record in user %}
+
+    <tr>
+      <td>{{ record.user }}</td>
+
+      <td>{{ record.created }}</td>
+      <td>{{ record.weight_update }}</td>
+      {% endfor %}
+    </tr>
+    </table>
+    <br>
+    {% endfor %}
+
+
+    <br>
     {% if request.user.is_authenticated %}
       <a href="{% url 'account' %}">Account</a>
       <a href="{% url 'logout' %}">Logout</a>

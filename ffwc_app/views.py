@@ -90,12 +90,40 @@ class CreateUserDetails(CreateView, LoginRequiredMixin):
         form.instance.user = self.request.user
         return super(CreateUserDetails, self).form_valid(form)
 
+
 class Group(ListView):
     model = User_Data
     context_object_name = 'user_data'
-
     template_name = 'ffwc_app/group.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['user_names'] = context['user_data'].filter(user=self.request.user)
+        context['weight_update'] = Weight_Update.objects.all().order_by('user')
+        print("?????", Weight_Update.objects.all().filter(user=2))
+
+
+
+
+        # .filter(user=1)
+        user_id_list = []
+        weight_progress = []
+        for q in context.get('weight_update'):
+            if q.user.id not in user_id_list:
+                user_id_list.append(q.user.id)
+
+        weight_update_values = Weight_Update.objects.all().order_by('user').values()
+
+        for id in user_id_list:
+            weight_id_data = weight_update_values.filter(user=id)
+            print("!!!!!!!!!!!!!!", weight_id_data)
+            weight_progress.append(weight_id_data)
+
+        context['weight_progress'] = weight_progress
+        # print(weight_progress.get(5))
+
+
+        return context
 
 '____________________________________________________'
 
