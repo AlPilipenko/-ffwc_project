@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, FormView
+from django.views.generic.edit import CreateView, UpdateView, FormView, DeleteView
 from django.urls import reverse_lazy
 from .models import User_Data, Weight_Update
 
@@ -32,11 +32,10 @@ class PersonalPage(ListView, LoginRequiredMixin):
         return context
 
 
-class TestDetail(DetailView):
-    pass
-    model = User_Data
-    context_object_name = 'test'
-    template_name = 'ffwc_app/test_detail.html'
+class DeleteWeightInput(DeleteView, LoginRequiredMixin):
+    model = Weight_Update
+    context_object_name = 'weight_record'
+    success_url = reverse_lazy('account')
 
 
 class InputWeight(CreateView, LoginRequiredMixin):
@@ -100,12 +99,12 @@ class Group(ListView):
         context = super().get_context_data(**kwargs)
         # context['user_names'] = context['user_data'].filter(user=self.request.user)
         context['weight_update'] = Weight_Update.objects.all().order_by('user')
-        print("?????", Weight_Update.objects.all().filter(user=2))
+        # print("?????", Weight_Update.objects.all().filter(user=2))
 
 
 
 
-        # .filter(user=1)
+        "Gets and sorts Dates and Weighs from Weight_Update."
         user_id_list = []
         weight_progress = []
         for q in context.get('weight_update'):
@@ -116,14 +115,39 @@ class Group(ListView):
 
         for id in user_id_list:
             weight_id_data = weight_update_values.filter(user=id)
-            print("!!!!!!!!!!!!!!", weight_id_data)
+            # print("!!!!!!!!!!!!!!", weight_id_data)
             weight_progress.append(weight_id_data)
 
+
+        "Data proccess for plots and other"
+        group_weight = 0
+        group_goal_weight = 0
+        for user in User_Data.objects.all().order_by('user').values():
+            user_name = user.get('name')
+            user_weight = user.get('weight')
+            user_goal_weight = user.get('goal_weight')
+            user_height = user.get('height')
+
+            group_weight += user_weight
+            group_goal_weight += user_goal_weight
+
+            print(user_name, user_weight, user_goal_weight, user_height)
+        group_to_lose = group_goal_weight - group_weight
+        print(group_weight, group_goal_weight, group_to_lose)
+
+
+
+
+        from itertools import chain
+        # result_queryset = list(chain(queryset1, queryset2))
+
+        # print(result_queryset)
+
+
+
         context['weight_progress'] = weight_progress
-        # print(weight_progress.get(5))
-
-
         return context
+
 
 '____________________________________________________'
 

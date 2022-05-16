@@ -46,17 +46,41 @@
 
     <!-- {{ weight_progress }} -->
     {% for user in weight_progress %}
-    <table>
-      {% for record in user %}
+      <table>
+        <!-- <td> -->
+          <tr>{{ user.name }}</tr>
+        <!-- </td> -->
 
-    <tr>
-      <td>{{ record.user }}</td>
 
-      <td>{{ record.created }}</td>
-      <td>{{ record.weight_update }}</td>
-      {% endfor %}
-    </tr>
-    </table>
+        <tr>
+          <th>Date</th>
+          {% for record in user %}
+            <td>{{ record.created|date:"d.m" }}</td>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          <th>Weight</th>
+          {% for record in user %}
+                <td>{{ record.weight_update }}</td>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          <th>Change %</th>
+          {% for record in user %}
+                <td>{{ record.change }}</td>
+          {% endfor %}
+        </tr>
+
+        <tr>
+          <th>BMI</th>
+          {% for record in user %}
+                <td>{{ record.bmi }}</td>
+          {% endfor %}
+        </tr>
+
+      </table>
     <br>
     {% endfor %}
 
