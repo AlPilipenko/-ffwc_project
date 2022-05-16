@@ -15,6 +15,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
 from .utils.auxiliary_functions import percentage_diff, bmi_calc
+from .utils.db_manips import data_extractor
+from .utils.plotmaker import create_graph, create_pie_chart
 # Create your views here.
 
 class PersonalPage(ListView, LoginRequiredMixin):
@@ -90,6 +92,9 @@ class CreateUserDetails(CreateView, LoginRequiredMixin):
         return super(CreateUserDetails, self).form_valid(form)
 
 
+'____________________________________________________'
+
+
 class Group(ListView):
     model = User_Data
     context_object_name = 'user_data'
@@ -102,67 +107,13 @@ class Group(ListView):
         # print("?????", Weight_Update.objects.all().filter(user=2))
 
 
-
-
-        "Gets and sorts Dates and Weighs from Weight_Update."
-        user_id_list = []
-        weight_progress = []
-        for q in context.get('weight_update'):
-            if q.user.id not in user_id_list:
-                user_id_list.append(q.user.id)
-
-        weight_update_values = Weight_Update.objects.all().order_by('user').values()
-
-        for id in user_id_list:
-            weight_id_data = weight_update_values.filter(user=id)
-            # print("!!!!!!!!!!!!!!", weight_id_data)
-            weight_progress.append(weight_id_data)
-
-
-        "Data proccess for plots and other"
-        group_weight = 0
-        group_goal_weight = 0
-        counter = 0
-        weight_context = {}
-        for user in User_Data.objects.all().order_by('user').values():
-            # print(user)
-            user_id = user.get('id')
-            user_name = user.get('name')
-            user_weight = user.get('weight')
-            user_goal_weight = user.get('goal_weight')
-            user_height = user.get('height')
-
-            weight_context[user_name] = {}
-            recorded_weights = weight_progress[counter]
-
-            percentage_change_list = []
-            bmi_list = []
-            record_date_list = []
-            record_list = []
-
-            for q in recorded_weights:
-                record_date = q.get('created')
-                record = q.get('weight_update')
-                per_change = percentage_diff(record, user_weight)
-                user_weight = record
-                bmi = bmi_calc(user_weight, user_height)
-
-                record_date_list.append(record_date)
-                record_list.append(record)
-                percentage_change_list.append(per_change)
-                bmi_list.append(bmi)
-
-                weight_context[user_name]['Date'] = record_date_list
-                weight_context[user_name]['Weight'] = record_list
-                weight_context[user_name]['Change %'] = percentage_change_list
-                weight_context[user_name]['BMI'] = bmi_list
-
-            counter += 1
-            group_weight += user_weight
-            group_goal_weight += user_goal_weight
-
-        group_to_lose = group_weight - group_goal_weight
-        context['weight_context'] = weight_context
+        weight_context = data_extractor(context, User_Data, Weight_Update)
+        graph_chart = create_graph(weight_context[0])
+        print(graph_chart)
+        pie_chart = create_pie_chart(weight_context[1],
+                                    weight_context[2], weight_context[3])
+        context['weight_context'] = weight_context[0]
+        context['graph_chart'] = graph_chart
         return context
 
 

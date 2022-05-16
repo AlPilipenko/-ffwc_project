@@ -7,7 +7,8 @@
     <div>
       <h3>Hello {{ request.user|title }},</h3>
     </div>
-
+    <img src="/static/base/plots/graph_chart.png" alt="">
+    <img src="/static/base/plots/pie_chart.png" alt="">
     <h3>Group details</h3>
 
 
@@ -43,7 +44,7 @@
 
     {% for user, data in weight_context.items %}
       <table>
-        <tr>{{ user }}</tr>
+        <tr><th><h3>{{ user }}</h3></th></tr>
         {% for k, record in data.items %}
           <tr>
             <th>{{k}}</th>

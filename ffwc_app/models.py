@@ -33,3 +33,9 @@ class Weight_Update(models.Model):
 
     class Meta:
         ordering = ['created']
+
+
+class Group_Data(models.Model):
+    changes = models.CharField(max_length=5000)
+    group_weight = models.FloatField()
+    group_goal_weight = models.FloatField()
