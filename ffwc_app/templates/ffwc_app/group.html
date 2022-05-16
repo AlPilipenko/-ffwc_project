@@ -10,6 +10,7 @@
 
     <h3>Group details</h3>
 
+
     <table>
       <tr>
       <th>Participants</th>
@@ -26,11 +27,6 @@
       <th>Initial weight</th>
       {% for data in user_data %}
       <td>{{ data.weight }}</td>
-        <!-- <td>{{ name }}</td> -->
-        <!-- <th>{{ data.name }}</th> -->
-        <!-- <th></th> -->
-        <!-- <th>{{ data.goal_weight }}</th> -->
-        <!-- <td>Height {{ data.height }}</td> -->
       {% endfor %}
       </tr>
 
@@ -43,43 +39,23 @@
     </table>
 
     <br>
+    <!-- {{ user_data }} -->
 
-    <!-- {{ weight_progress }} -->
-    {% for user in weight_progress %}
+    {% for user, data in weight_context.items %}
       <table>
-        <!-- <td> -->
-          <tr>{{ user.name }}</tr>
-        <!-- </td> -->
-
-
-        <tr>
-          <th>Date</th>
-          {% for record in user %}
-            <td>{{ record.created|date:"d.m" }}</td>
+        <tr>{{ user }}</tr>
+        {% for k, record in data.items %}
+          <tr>
+            <th>{{k}}</th>
+            {% for u in record %}
+              {% if k == 'Date'  %}
+                <td>{{ u|date:"d.m" }}</td>
+              {% else %}
+                <td>{{ u }}</td>
+              {% endif %}
+            {% endfor %}
           {% endfor %}
         </tr>
-
-        <tr>
-          <th>Weight</th>
-          {% for record in user %}
-                <td>{{ record.weight_update }}</td>
-          {% endfor %}
-        </tr>
-
-        <tr>
-          <th>Change %</th>
-          {% for record in user %}
-                <td>{{ record.change }}</td>
-          {% endfor %}
-        </tr>
-
-        <tr>
-          <th>BMI</th>
-          {% for record in user %}
-                <td>{{ record.bmi }}</td>
-          {% endfor %}
-        </tr>
-
       </table>
     <br>
     {% endfor %}

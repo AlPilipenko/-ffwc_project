@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
-
+from .utils.auxiliary_functions import percentage_diff, bmi_calc
 # Create your views here.
 
 class PersonalPage(ListView, LoginRequiredMixin):
@@ -122,30 +122,47 @@ class Group(ListView):
         "Data proccess for plots and other"
         group_weight = 0
         group_goal_weight = 0
+        counter = 0
+        weight_context = {}
         for user in User_Data.objects.all().order_by('user').values():
+            # print(user)
+            user_id = user.get('id')
             user_name = user.get('name')
             user_weight = user.get('weight')
             user_goal_weight = user.get('goal_weight')
             user_height = user.get('height')
 
+            weight_context[user_name] = {}
+            recorded_weights = weight_progress[counter]
+
+            percentage_change_list = []
+            bmi_list = []
+            record_date_list = []
+            record_list = []
+
+            for q in recorded_weights:
+                record_date = q.get('created')
+                record = q.get('weight_update')
+                per_change = percentage_diff(record, user_weight)
+                user_weight = record
+                bmi = bmi_calc(user_weight, user_height)
+
+                record_date_list.append(record_date)
+                record_list.append(record)
+                percentage_change_list.append(per_change)
+                bmi_list.append(bmi)
+
+                weight_context[user_name]['Date'] = record_date_list
+                weight_context[user_name]['Weight'] = record_list
+                weight_context[user_name]['Change %'] = percentage_change_list
+                weight_context[user_name]['BMI'] = bmi_list
+
+            counter += 1
             group_weight += user_weight
             group_goal_weight += user_goal_weight
 
-            print(user_name, user_weight, user_goal_weight, user_height)
-        group_to_lose = group_goal_weight - group_weight
-        print(group_weight, group_goal_weight, group_to_lose)
-
-
-
-
-        from itertools import chain
-        # result_queryset = list(chain(queryset1, queryset2))
-
-        # print(result_queryset)
-
-
-
-        context['weight_progress'] = weight_progress
+        group_to_lose = group_weight - group_goal_weight
+        context['weight_context'] = weight_context
         return context
 
 
