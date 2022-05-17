@@ -8,17 +8,16 @@ html {
   background-repeat: repeat;
 }
 
+
 .content{
-  padding-top: 2px !important;
+  padding-top: 5px !important;
   width: auto;
-  max-width: 800px;
+  max-width: 1200px;
   height: auto;
   margin-left: 50px;
   margin-right: 50px;
-  /* width: 50%; */
-  /* position: absolute; */
+  box-sizing: content-box;
 }
-
 
 p, h1, h2, h3, h4, h5, h6 {
   color: #043551;
@@ -26,10 +25,10 @@ p, h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 }
 
-table, th, td, th {
+table, th, td, tr {
   text-align: center;
-  padding: 1.5px;
-  border: 1px solid;
+  padding-left: 18.5px;
+  /* border: 1px solid; */
   color: #043551;
   font-family: Cursive, Brush Script MT !important;
   font-weight: bold;
@@ -47,7 +46,6 @@ a:hover{
   font-family: Cursive, Brush Script MT !important;
   font-weight: bold;
 }
-
 
 .column {
   float: center;

@@ -90,7 +90,7 @@ class EditWeightRecord(UpdateView, LoginRequiredMixin):
 
 
 # =======Main page=============================================================
-class Group(ListView):
+class Group(ListView, LoginRequiredMixin):
     model = User_Data
     context_object_name = 'user_data'
     template_name = 'ffwc_app/group.html'
@@ -99,15 +99,18 @@ class Group(ListView):
         context = super().get_context_data(**kwargs)
         # context['user_names'] = context['user_data'].filter(user=self.request.user)
         context['weight_update'] = Weight_Update.objects.all().order_by('user')
-        # print("?????", Weight_Update.objects.all().filter(user=2))
-        print("!!!!!!!!!!!!", context.get('weight_update'))
+        # print(Weight_Update.objects.all().filter(user=2))
+        # print(context.get('weight_update'))
+        # if context['weight_update'] == 0:
+        #     print("!!!!!!!!!!!!!")
+        #     return context
+        
 
         weight_context = data_extractor(context, User_Data, Weight_Update)
         graph_chart = create_graph(weight_context[0])
         pie_chart = create_pie_chart(weight_context[1],
                                     weight_context[2], weight_context[3])
         context['weight_context'] = weight_context[0]
-        # context['graph_chart'] = graph_chart
         return context
 
 
@@ -125,7 +128,7 @@ class RegisterPage(FormView):
     template_name = 'ffwc_app/register.html'
     form_class = UserCreationForm
     redirect_authenticated_user = True
-    success_url = reverse_lazy('group')
+    success_url = reverse_lazy('new-details')
 
     def form_valid(self, form):
         """When reg form is valid return logedin user to the group page"""

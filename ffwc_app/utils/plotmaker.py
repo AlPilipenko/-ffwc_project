@@ -37,10 +37,15 @@ def create_graph(dataset):
     x = []
     y = []
     users = []
+    weight_not_recorded = []
     for user in dataset:
+
         user_data = dataset.get(user)
         date = user_data.get('Date')
         weight = user_data.get('Weight')
+        if weight is None:
+            weight_not_recorded.append(user)
+            continue
         users.append(user)
         tics = (len(date))
         x_steps = [c for c in range(1, tics+1)]
@@ -54,6 +59,8 @@ def create_graph(dataset):
 
     counter = 0
     for name in users:
+        if name in weight_not_recorded:
+            continue
         color = colors[counter]
         plt.plot(x[counter], y[counter], label=name,
                                     linewidth=2.0, color=color)
