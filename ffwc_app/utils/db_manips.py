@@ -23,13 +23,19 @@ def data_extractor(context, User_Data, Weight_Update):
     weight_context = {}
     for user in User_Data.objects.all().order_by('user').values():
         user_id = user.get('id')
+        user_id2 = user.get('user_id')
         user_name = user.get('name')
         user_weight = user.get('weight')
         user_goal_weight = user.get('goal_weight')
         user_height = user.get('height')
-
         weight_context[user_name] = {}
-        recorded_weights = weight_progress[counter]
+        try:
+            recorded_weights = weight_progress[counter]
+        except IndexError:
+            """Appears when user just has been created and trying to
+            create first weight record.
+            """
+            continue
         user_initial_weight += user_weight
         percentage_change_list = []
         bmi_list = []

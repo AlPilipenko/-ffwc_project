@@ -1,43 +1,65 @@
 {% extends 'ffwc_app/base.html' %}
 {% block content %}
 
+    <div class="row">
+      <div class="column">
+        <h4 style="color: darkorange; font-size: 116px; text-shadow: 2px -2px #043551;">FFWC</h4>
+        <h4 style="color: lightgreen; font-size: 20px; text-shadow: 2px -2px #043551;">Friends & Family Weight Challenge</h4>
+        <img src="/static/base/plots/graph_chart.png" alt="">
+
+      </div>
+      <div class="column">
+
+        {% if request.user.is_authenticated %}
+          <h3 style="padding-top: 20px">Hello {{ request.user|title }},</h3>
+          <a href="{% url 'account' %}">Account</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+        {% endif %}
 
 
-  <div class="header-bar">
-    <div>
-      <h3>Hello {{ request.user|title }},</h3>
+        <br>
+        <h3>Group details</h3>
+
+        <table>
+          <tr>
+          <th>Participants</th>
+          {% for data in user_data %}
+            <td>{{ data.name }}</td>
+            <!-- <th>{{ name }}</th> -->
+            <!-- <th>Weight</th>
+            <th>Desired weight</th> -->
+            <!-- <th>Name</th> -->
+          {% endfor %}
+          </tr>
+
+          <tr>
+          <th>Initial weight</th>
+          {% for data in user_data %}
+          <td>{{ data.weight }}</td>
+          {% endfor %}
+          </tr>
+
+          <tr>
+          <th>Goal</th>
+          {% for data in user_data %}
+          <td>{{ data.goal_weight }}</td>
+          {% endfor %}
+          </tr>
+        </table>
+        <img src="/static/base/plots/pie_chart.png" alt="">
+      </div>
+      <div class="column">
+        <img src="{{ tr_delta_btc_price_plot }}" alt="">
+      </div>
+
+      <div class="column">
+        <img src="{{ new_wallets_btc_price_plot }}" alt="">
+      </div>
     </div>
-    <img src="/static/base/plots/graph_chart.png" alt="">
-    <img src="/static/base/plots/pie_chart.png" alt="">
-    <h3>Group details</h3>
 
 
-    <table>
-      <tr>
-      <th>Participants</th>
-      {% for data in user_data %}
-        <td>{{ data.name }}</td>
-        <!-- <th>{{ name }}</th> -->
-        <!-- <th>Weight</th>
-        <th>Desired weight</th> -->
-        <!-- <th>Name</th> -->
-      {% endfor %}
-      </tr>
-
-      <tr>
-      <th>Initial weight</th>
-      {% for data in user_data %}
-      <td>{{ data.weight }}</td>
-      {% endfor %}
-      </tr>
-
-      <tr>
-      <th>Goal</th>
-      {% for data in user_data %}
-      <td>{{ data.goal_weight }}</td>
-      {% endfor %}
-      </tr>
-    </table>
 
     <br>
     <!-- {{ user_data }} -->
@@ -63,13 +85,7 @@
 
 
     <br>
-    {% if request.user.is_authenticated %}
-      <a href="{% url 'account' %}">Account</a>
-      <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-      <a href="{% url 'login' %}">Login</a>
-    {% endif %}
-  </div>
+
 
 
 {% endblock %}

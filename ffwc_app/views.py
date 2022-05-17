@@ -19,6 +19,8 @@ from .utils.db_manips import data_extractor
 from .utils.plotmaker import create_graph, create_pie_chart
 # Create your views here.
 
+
+# =======Personal account manipulations========================================
 class PersonalPage(ListView, LoginRequiredMixin):
     model = User_Data
     context_object_name = 'user_data'
@@ -32,43 +34,6 @@ class PersonalPage(ListView, LoginRequiredMixin):
         context['weight_update'] = Weight_Update.objects.all().filter(
                                                     user=self.request.user.id)
         return context
-
-
-class DeleteWeightInput(DeleteView, LoginRequiredMixin):
-    model = Weight_Update
-    context_object_name = 'weight_record'
-    success_url = reverse_lazy('account')
-
-
-class InputWeight(CreateView, LoginRequiredMixin):
-    model = Weight_Update
-    # fields = ('weight_update', )
-    fields = ['weight_update']
-    # context_object_name = 'weight'
-    context_object_name = 'weight_record'
-    success_url = reverse_lazy('account')
-
-    def form_valid(self, form):
-        """Because one model is related to other, I encountered
-        'must be an instance of other model' error.
-        """
-        form.instance.user_id = self.request.user.id
-        return super(InputWeight, self).form_valid(form)
-
-
-class EditWeightRecord(UpdateView, LoginRequiredMixin):
-    model = Weight_Update
-    # fields = ('weight_update', )
-    fields = ['weight_update']
-    # context_object_name = 'weight'
-    # context_object_name = 'weight_record'
-    template_name = 'ffwc_app/edit_weight_update_form.html'
-    success_url = reverse_lazy('account')
-
-    def form_valid(self, form):
-        form.instance.user_id = self.request.user.id
-        return super(EditWeightRecord, self).form_valid(form)
-
 
 class ChangeUserDetails(UpdateView, LoginRequiredMixin):
     model = User_Data
@@ -92,9 +57,39 @@ class CreateUserDetails(CreateView, LoginRequiredMixin):
         return super(CreateUserDetails, self).form_valid(form)
 
 
-'____________________________________________________'
+# =======Weight manipulations==================================================
+class DeleteWeightInput(DeleteView, LoginRequiredMixin):
+    model = Weight_Update
+    context_object_name = 'weight_record'
+    success_url = reverse_lazy('account')
 
 
+class InputWeight(CreateView, LoginRequiredMixin):
+    model = Weight_Update
+    fields = ['weight_update']
+    context_object_name = 'weight_record'
+    success_url = reverse_lazy('account')
+
+    def form_valid(self, form):
+        """Because one model is related to other, I encountered
+        'must be an instance of other model' error.
+        """
+        form.instance.user_id = self.request.user.id
+        return super(InputWeight, self).form_valid(form)
+
+
+class EditWeightRecord(UpdateView, LoginRequiredMixin):
+    model = Weight_Update
+    fields = ['weight_update']
+    template_name = 'ffwc_app/edit_weight_update_form.html'
+    success_url = reverse_lazy('account')
+
+    def form_valid(self, form):
+        form.instance.user_id = self.request.user.id
+        return super(EditWeightRecord, self).form_valid(form)
+
+
+# =======Main page=============================================================
 class Group(ListView):
     model = User_Data
     context_object_name = 'user_data'
@@ -105,20 +100,18 @@ class Group(ListView):
         # context['user_names'] = context['user_data'].filter(user=self.request.user)
         context['weight_update'] = Weight_Update.objects.all().order_by('user')
         # print("?????", Weight_Update.objects.all().filter(user=2))
-
+        print("!!!!!!!!!!!!", context.get('weight_update'))
 
         weight_context = data_extractor(context, User_Data, Weight_Update)
         graph_chart = create_graph(weight_context[0])
-        print(graph_chart)
         pie_chart = create_pie_chart(weight_context[1],
                                     weight_context[2], weight_context[3])
         context['weight_context'] = weight_context[0]
-        context['graph_chart'] = graph_chart
+        # context['graph_chart'] = graph_chart
         return context
 
 
-'____________________________________________________'
-
+# =======Login and Registration================================================
 class CustomLoginView(LoginView):
     template_name = 'ffwc_app/login.html'
     fields = '__all__'

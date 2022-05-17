@@ -1,22 +1,62 @@
 html {
-  background-color: #17605d !important;
-  /* background: "{% url 'static' default.jpg %}"; */
+  background-image: url("background.jpeg");
+  background-repeat: repeat;
 }
 
 .background_image {
   background-image: url("background.jpeg");
-  /* background-color: #cccccc; */
-  height: 1100px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  padding-top: 50px;
+  background-repeat: repeat;
+}
+
+.content{
+  padding-top: 2px !important;
+  width: auto;
+  max-width: 800px;
+  height: auto;
+  margin-left: 50px;
+  margin-right: 50px;
+  /* width: 50%; */
+  /* position: absolute; */
 }
 
 
+p, h1, h2, h3, h4, h5, h6 {
+  color: #043551;
+  font-family: Cursive, Brush Script MT !important;
+  font-weight: bold;
+}
 
-table, th, td {
+table, th, td, th {
   text-align: center;
-  /* border: 1px solid; */
+  padding: 1.5px;
+  border: 1px solid;
+  color: #043551;
+  font-family: Cursive, Brush Script MT !important;
+  font-weight: bold;
+}
+
+a {
+  color: darkorange;
+  font-family: Cursive, Brush Script MT !important;
+  font-weight: bold;
+}
+
+a:hover{
+  color: #98a6ac;
+  text-decoration: none;
+  font-family: Cursive, Brush Script MT !important;
+  font-weight: bold;
+}
+
+
+.column {
+  float: center;
+  width: 50%;
+  padding: 5px;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }

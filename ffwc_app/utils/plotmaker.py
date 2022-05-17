@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 from .db_manips import data_extractor
 
-colors = ['gold', 'magenta', 'green', 'brown', 'red', 'blue']
+colors = ['lightgreen', 'darkorange', 'magenta', 'green', 'brown', 'red', 'blue']
 
 
 def create_pie_chart(weight, initial_weight, goal_weight):
@@ -14,14 +14,15 @@ def create_pie_chart(weight, initial_weight, goal_weight):
     lose_weight_diff = initial_weight - goal_weight
     left_to_lose = lose_weight_diff - lost_weight
     left_to_lose = left_to_lose if left_to_lose >= 0 else 0
-    lables = ['Lost weight', 'Weight to lose']
+    lables = [f'Lost weight: {lost_weight} kg',
+                                        f'Weight to lose: {left_to_lose} kg']
     plt.pie([lost_weight, left_to_lose],
             colors=colors, shadow=True,
             wedgeprops={'edgecolor': 'black'},
-            labels=lables, startangle=90,
-            autopct='%1.1f%%')
+            startangle=90, autopct='%1.1f%%')
     plt.title('Group effort progress')
     plt.grid(False)
+    plt.legend(labels=lables)
     path = os.getcwd()
     file = '/ffwc_app/static/base/plots/pie_chart.png'
     file_path = path + file

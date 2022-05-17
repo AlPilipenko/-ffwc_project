@@ -16,7 +16,7 @@ def bmi_calc(weight: float, height: float) -> float:
     return bmi
 
 
-"=======================Tests=================================================="
+# =======================Tests==================================================
 percentage_diff_test_table = [
         # test name                                   values  expected
     ["Test 1: New value is greater than the previous.", [99, 88], 12.5],
@@ -56,5 +56,6 @@ def bmi_calc_test(table):
     print(" ")
 
 
-percentage_diff_test(percentage_diff_test_table)
-bmi_calc_test(bmi_test_table)
+if __name__ == '__main__':
+    percentage_diff_test(percentage_diff_test_table)
+    bmi_calc_test(bmi_test_table)

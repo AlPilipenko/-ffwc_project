@@ -1,8 +1,7 @@
 {% extends 'ffwc_app/base.html' %}
 {% block content %}
+<h3>Weight record</h3>
 
-    <a href="{% url 'update-weight' %}">Record weight</a>
-    <h1>efef{{ user_data }}</h1>
     <table>
       <tr>
         <th>Personal details</th>
@@ -29,7 +28,8 @@
       {% endfor %}
     </table>
 
-    <h3>Weight record</h3>
+    <br>
+    <br>
     <table>
       <tr>
         <th>Date</th>
@@ -50,7 +50,11 @@
           <h2>Empty!</h2>
       {% endfor %}
     </table>
-  <a href="{% url 'group' %}">Back to group page</a>
+   <a href="{% url 'update-weight' %}">Record weight</a>
+   <br>
+   <br>
+   <br>
+   <a href="{% url 'group' %}">Back to group page</a>
 
 
 {% endblock %}
