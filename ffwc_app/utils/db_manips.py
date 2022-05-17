@@ -22,7 +22,6 @@ def data_extractor(context, User_Data, Weight_Update):
     user_initial_weight = 0
     weight_context = {}
     for user in User_Data.objects.all().order_by('user').values():
-        # print(user)
         user_id = user.get('id')
         user_name = user.get('name')
         user_weight = user.get('weight')
@@ -36,7 +35,6 @@ def data_extractor(context, User_Data, Weight_Update):
         bmi_list = []
         record_date_list = []
         record_list = []
-
 
         for q in recorded_weights:
             record_date = q.get('created')
@@ -61,6 +59,5 @@ def data_extractor(context, User_Data, Weight_Update):
         group_goal_weight += user_goal_weight
 
     group_to_lose = group_weight - group_goal_weight
-    print("HHHHHHHHHHHHHHHHHHHHHHHHH", user_initial_weight)
-    return (weight_context, group_weight,
-                        user_initial_weight, group_goal_weight)
+
+    return (weight_context, group_weight, user_initial_weight, group_goal_weight)

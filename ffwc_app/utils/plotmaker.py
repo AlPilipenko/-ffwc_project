@@ -8,33 +8,36 @@ colors = ['gold', 'magenta', 'green', 'brown', 'red', 'blue']
 
 
 def create_pie_chart(weight, initial_weight, goal_weight):
-    plt.pie([initial_weight - weight, initial_weight - goal_weight],
+    """Creates pie chart of group effort to lose weight
+    versus already made progress. Responsive to changes."""
+    lost_weight = initial_weight - weight
+    lose_weight_diff = initial_weight - goal_weight
+    left_to_lose = lose_weight_diff - lost_weight
+    left_to_lose = left_to_lose if left_to_lose >= 0 else 0
+    lables = ['Lost weight', 'Weight to lose']
+    plt.pie([lost_weight, left_to_lose],
             colors=colors, shadow=True,
-            wedgeprops={'edgecolor': 'black'})
-    print("OOOOOOOOOOOOOOOOOOO",initial_weight - weight, initial_weight - goal_weight )
-     # labels='chart',
-
-     #     , textprops='textprops')
+            wedgeprops={'edgecolor': 'black'},
+            labels=lables, startangle=90,
+            autopct='%1.1f%%')
+    plt.title('Group effort progress')
     plt.grid(False)
-
     path = os.getcwd()
     file = '/ffwc_app/static/base/plots/pie_chart.png'
     file_path = path + file
     plt.savefig(file_path, bbox_inches='tight', transparent=True)
-
+    plt.close('all')
 
 
 def create_graph(dataset):
-
+    """Creates a plot of challenge participants. The progress of each
+    user is represented by unique color line. Responsive to changes.
+    """
     x = []
     y = []
     users = []
     for user in dataset:
-        print(user)
         user_data = dataset.get(user)
-        # print(user_data)
-        # for entry in user_data:
-        #     print(entry)
         date = user_data.get('Date')
         weight = user_data.get('Weight')
         users.append(user)
@@ -45,42 +48,22 @@ def create_graph(dataset):
 
     plt.style.use('_mpl-gallery')
     fig, ax = plt.subplots()
+    fig = matplotlib.pyplot.gcf()
     ax.grid(False)
 
-    # x_steps = (len(x) ) * len(users)+1
-    # x = [c for c in range(1, x_steps)]
-    # print()
-    color_counter = 0
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!", x,y)
+    counter = 0
     for name in users:
-        # counter = 0
-        color = colors[color_counter]
-        for tick, weight in zip(x, y):
-            print(tick, weight)
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!", color)
-            ax.plot(tick, weight, label="Line",
+        color = colors[counter]
+        plt.plot(x[counter], y[counter], label=name,
                                     linewidth=2.0, color=color)
-            # counter += 1
-        color_counter += 1
+        ax.set_xticks([])
+        ax.set_ylabel('Weight (kg)')
+        counter += 1
 
-
-
-    # fig, ax = plt.subplots(figsize=(6, 6))
-
-
-    # ax.plot(x[0], y[0], label="Line", linewidth=2.0, color='blue')
-    # return graph_plot
-
-
+    plt.title('Individual progress')
+    plt.legend()
     path = os.getcwd()
     file = '/ffwc_app/static/base/plots/graph_chart.png'
     file_path = path + file
     plt.savefig(file_path, bbox_inches='tight', transparent=True)
-
-
-    # plot_instance = Plots()
-    # plot_instance.plot_name = name
-    # plot_instance.plot = 'aggregator/plots/' + name
-    # plot_instance.save()
-
     plt.close('all')
